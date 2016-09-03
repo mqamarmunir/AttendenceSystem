@@ -1,0 +1,14 @@
+D:\Muhammad Qamar\Attendence\AttendenceSystem\AttendenceSystem\Attendence\obj\Debug\Attendence.MainForm.resources
+D:\Muhammad Qamar\Attendence\AttendenceSystem\AttendenceSystem\Attendence\obj\Debug\Attendence.Properties.Resources.resources
+D:\Muhammad Qamar\Attendence\AttendenceSystem\AttendenceSystem\Attendence\obj\Debug\Attendence.csproj.GenerateResource.Cache
+D:\Muhammad Qamar\Attendence\AttendenceSystem\AttendenceSystem\Attendence\bin\Debug\Attendence.exe.config
+D:\Muhammad Qamar\Attendence\AttendenceSystem\AttendenceSystem\Attendence\bin\Debug\Attendence.exe
+D:\Muhammad Qamar\Attendence\AttendenceSystem\AttendenceSystem\Attendence\bin\Debug\Attendence.pdb
+D:\Muhammad Qamar\Attendence\AttendenceSystem\AttendenceSystem\Attendence\obj\Debug\Attendence.exe
+D:\Muhammad Qamar\Attendence\AttendenceSystem\AttendenceSystem\Attendence\obj\Debug\Attendence.pdb
+D:\Muhammad Qamar\Attendence\AttendenceSystem\AttendenceSystem\Attendence\bin\Debug\Newtonsoft.Json.dll
+D:\Muhammad Qamar\Attendence\AttendenceSystem\AttendenceSystem\Attendence\bin\Debug\Newtonsoft.Json.xml
+D:\Muhammad Qamar\Attendence\AttendenceSystem\AttendenceSystem\Attendence\obj\Debug\Attendence.frmThumbRegistration.resources
+D:\Muhammad Qamar\Attendence\AttendenceSystem\AttendenceSystem\Attendence\obj\Debug\Attendence.frmIdentification.resources
+D:\Muhammad Qamar\Attendence\AttendenceSystem\AttendenceSystem\Attendence\obj\Debug\Attendence.UserControls.Attendence.resources
+D:\Muhammad Qamar\Attendence\AttendenceSystem\AttendenceSystem\Attendence\obj\Debug\Attendence.csprojResolveAssemblyReference.cache
