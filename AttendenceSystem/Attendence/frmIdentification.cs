@@ -31,17 +31,24 @@ namespace Attendence
             else
             {
                 ////////////
-                List<Fmd> objfmd = new List<Fmd>();
+                Dictionary<int,Fmd> objfmd = new Dictionary<int, Fmd>();
                 
-                string s = System.IO.File.ReadAllText(System.IO.Path.GetDirectoryName(Application.ExecutablePath) + "/PersonsData/personfingerprint.txt");
+                //string s = System.IO.File.ReadAllText(System.IO.Path.GetDirectoryName(Application.ExecutablePath) + "/PersonsData/personfingerprint.txt");
                 try
                 {
+                    for (int i = 0; i < StaticData.Persondatalist.Count; i++)
+                    {
+                        int personid = StaticData.Persondatalist[i].UserId;
+                        string fingerprintdata = StaticData.Persondatalist[i].FingerPrint;
+                        Fmd dmd = Fmd.DeserializeXml(fingerprintdata);
+                        objfmd.Add(personid, dmd);
+                    }
                     //JavaScriptSerializer JSserializer = new JavaScriptSerializer();
                   //  object x = JSserializer.Deserialize<object>(s);
                     //Fmd[] fmd = new Fmd[1];
-                    Fmd dmd=Fmd.DeserializeXml(s);
+                    
 
-                    objfmd.Add(dmd);
+                    //objfmd.Add(dmd);
 
 
                    // objfmd.Add(x);
@@ -56,7 +63,7 @@ namespace Attendence
                 // See the SDK documentation for an explanation on threshold scores.
                 int thresholdScore = DPFJ_PROBABILITY_ONE * 1 / 100000;
 
-                identificationControl = new DPCtlUruNet.IdentificationControl(_sender.CurrentReader, objfmd, thresholdScore, 10, Constants.CapturePriority.DP_PRIORITY_COOPERATIVE);
+                identificationControl = new DPCtlUruNet.IdentificationControl(_sender.CurrentReader, objfmd.Values, thresholdScore, 1, Constants.CapturePriority.DP_PRIORITY_EXCLUSIVE);
                 identificationControl.Location = new System.Drawing.Point(3, 3);
                 identificationControl.Name = "identificationControl";
                 identificationControl.Size = new System.Drawing.Size(397, 128);
@@ -64,7 +71,7 @@ namespace Attendence
                 identificationControl.OnIdentify += new DPCtlUruNet.IdentificationControl.FinishIdentification(this.identificationControl_OnIdentify);
 
                 // Be sure to set the maximum number of matches you want returned.
-                identificationControl.MaximumResult = 10;
+                identificationControl.MaximumResult = 1;
 
                 this.Controls.Add(identificationControl);
             }

@@ -7,18 +7,18 @@ using DataLayer;
 
 namespace BusinessLayer
 {
-    public class Personnel
+    public class PersonnelAttendence
     {
         #region Class Variables
 
         private const string Default = "~!@";
-        private const string TableName = "hr_roster_emp_finger_print";
+        private const string TableName = "hr_roster_attendance_machine";
         public string StrErrorMessage { get; set; }
 
         public int EmployeeId { get; set; }
-        public string Thumbcode { get; set; }
+        public string date_time { get; set; }
 
-
+        public int BranchID { get; set; }
 
         clsoperation objTrans = new clsoperation();
 
@@ -91,25 +91,27 @@ namespace BusinessLayer
 
             if (!this.EmployeeId.Equals(Default))
             {
-                arySAPS[0, 0] = "emp_id";
+                arySAPS[0, 0] = "employee_id";
                 arySAPS[0, 1] = this.EmployeeId.ToString();
                 arySAPS[0, 2] = "int";
             }
 
-           
-           
 
-           
-                arySAPS[1, 0] = "Enteredon";
-                arySAPS[1, 1] = DateTime.Now.ToString("dd/MM/yyyy hh:mm:ss tt");
-                arySAPS[1, 2] = "datetime";
-          
 
-            if (!this.Thumbcode.Equals(Default))
+
+            if (!this.EmployeeId.Equals(Default))
+
             {
-                arySAPS[2, 0] = "thumb_code";
-                arySAPS[2, 1] = this.Thumbcode;
-                arySAPS[2, 2] = "string";
+                arySAPS[1, 0] = "date_time";
+                arySAPS[1, 1] = this.date_time;
+                arySAPS[1, 2] = "datetime";
+            }
+
+            if (!this.BranchID.Equals(Default))
+            {
+                arySAPS[2, 0] = "Branch_ID";
+                arySAPS[2, 1] = this.BranchID.ToString().Trim();
+                arySAPS[2, 2] = "int";
             }
 
             return arySAPS;

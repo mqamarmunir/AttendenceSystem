@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using DPUruNet;
 using System.Web.Script.Serialization;
+using System.Threading;
 
 namespace Attendence
 {
@@ -16,11 +17,27 @@ namespace Attendence
     {
         public MainForm _sender;
 
+        private bool reset;
+
         List<Fmd> preenrollmentFmds;
         int count;
+
+        private static Reader currentReader;
+        private ReaderCollection _readers;
+        public Reader CurrentReader
+        {
+            get { return currentReader; }
+            set
+            {
+                currentReader = value;
+                // SendMessage(Action.UpdateReaderState, value);
+            }
+        }
         public frmThumbRegistration()
         {
             InitializeComponent();
+            _readers = ReaderCollection.GetReaders();
+            currentReader = _readers[0];
         }
 
 
@@ -32,17 +49,125 @@ namespace Attendence
 
             SendMessage(Action.SendMessage, "Place a finger on the reader.");
 
-            if (!_sender.OpenReader())
+            if (!OpenReader())
             {
                 this.Close();
             }
 
-            if (!_sender.StartCaptureAsync(this.OnCaptured))
+            if (!StartCaptureAsync(this.OnCaptured))
             {
                 this.Close();
             }
         }
-   
+        public bool StartCaptureAsync(Reader.CaptureCallback OnCaptured)
+        {
+            // Activate capture handler
+            currentReader.On_Captured += new Reader.CaptureCallback(OnCaptured);
+
+            // Call capture
+            if (!CaptureFingerAsync())
+            {
+                return false;
+            }
+
+            return true;
+        }
+        public void GetStatus()
+        {
+            Constants.ResultCode result = currentReader.GetStatus();
+
+            if ((result != Constants.ResultCode.DP_SUCCESS))
+            {
+                reset = true;
+                throw new Exception("" + result);
+            }
+
+            if ((currentReader.Status.Status == Constants.ReaderStatuses.DP_STATUS_BUSY))
+            {
+                Thread.Sleep(50);
+            }
+            else if ((currentReader.Status.Status == Constants.ReaderStatuses.DP_STATUS_NEED_CALIBRATION))
+            {
+                currentReader.Calibrate();
+            }
+            else if ((currentReader.Status.Status != Constants.ReaderStatuses.DP_STATUS_READY))
+            {
+                throw new Exception("Reader Status - " + currentReader.Status.Status);
+            }
+        }
+        public bool CaptureFingerAsync()
+        {
+            try
+            {
+                GetStatus();
+
+                Constants.ResultCode captureResult = currentReader.CaptureAsync(Constants.Formats.Fid.ANSI, Constants.CaptureProcessing.DP_IMG_PROC_DEFAULT, currentReader.Capabilities.Resolutions[0]);
+                if (captureResult != Constants.ResultCode.DP_SUCCESS)
+                {
+                    reset = true;
+                    throw new Exception("" + captureResult);
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error:  " + ex.Message);
+                return false;
+            }
+        }
+        public void CancelCaptureAndCloseReader(Reader.CaptureCallback OnCaptured)
+        {
+            if (currentReader != null)
+            {
+                // Dispose of reader handle and unhook reader events.
+                currentReader.Dispose();
+
+                if (reset)
+                {
+                    CurrentReader = null;
+                }
+            }
+        }
+        public bool OpenReader()
+        {
+            
+
+            reset = false;
+            Constants.ResultCode result = Constants.ResultCode.DP_DEVICE_FAILURE;
+
+            // Open reader
+            result = currentReader.Open(Constants.CapturePriority.DP_PRIORITY_EXCLUSIVE);
+
+            if (result != Constants.ResultCode.DP_SUCCESS)
+            {
+                MessageBox.Show("Error:  " + result);
+                reset = true;
+                return false;
+            }
+
+            return true;
+        }
+        public bool CheckCaptureResult(CaptureResult captureResult)
+        {
+            if (captureResult.Data == null)
+            {
+                if (captureResult.ResultCode != Constants.ResultCode.DP_SUCCESS)
+                {
+                    reset = true;
+                    throw new Exception(captureResult.ResultCode.ToString());
+                }
+
+                // Send message if quality shows fake finger
+                if ((captureResult.Quality != Constants.CaptureQuality.DP_QUALITY_CANCELED))
+                {
+                    throw new Exception("Quality - " + captureResult.Quality);
+                }
+                return false;
+            }
+
+            return true;
+        }
 
         /// <summary>
         /// Handler for when a fingerprint is captured.
@@ -53,7 +178,7 @@ namespace Attendence
             try
             {
                 // Check capture quality and throw an error if bad.
-                if (!_sender.CheckCaptureResult(captureResult)) return;
+                if (!CheckCaptureResult(captureResult)) return;
 
                 count++;
 
@@ -88,12 +213,14 @@ namespace Attendence
                             PersonID = MainForm.personid,
                             FingerPrintDataXML= serializedFmd
                         };
-                       
-                        
+
+                        if(!System.IO.Directory.Exists(System.IO.Path.GetDirectoryName(Application.ExecutablePath) + " /PersonsData/PersonFingerPrints"))
+                            System.IO.Directory.CreateDirectory(System.IO.Path.GetDirectoryName(Application.ExecutablePath) + " /PersonsData/PersonFingerPrints");
+
 
                         var ss = JSserializer.Serialize(fp);
 
-                        System.IO.File.AppendAllText(System.IO.Path.GetDirectoryName(Application.ExecutablePath) + "/PersonsData/personfingerprint.txt", ss);
+                        System.IO.File.WriteAllText(System.IO.Path.GetDirectoryName(Application.ExecutablePath) + "/PersonsData/PersonFingerPrints/personfingerprint("+fp.PersonID+").txt", ss);
 
                         var list = StaticData.Persondatalist;
                         var thisperson = list.FirstOrDefault(c => c.UserId == MainForm.personid);
@@ -105,7 +232,7 @@ namespace Attendence
                         string personupdated = JSserializer.Serialize(list);
                         System.IO.File.WriteAllText(System.IO.Path.GetDirectoryName(Application.ExecutablePath) + "/PersonsData/persons.txt", personupdated);
 
-                        _sender.CurrentReader.Reset();
+                       CurrentReader.Reset();
                         if (!this.InvokeRequired)
                             btnOk.PerformClick();
 //                        _sender.CurrentReader.Dispose();
@@ -197,6 +324,12 @@ namespace Attendence
         private void btnFirstImpression_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void btnOk_Click(object sender, EventArgs e)
+        {
+            CurrentReader.Dispose();
+            CurrentReader = null;
         }
     }
 }

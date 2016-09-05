@@ -33,13 +33,14 @@
             this.attendence1 = new Attendence.UserControls.Attendence();
             this.button2 = new System.Windows.Forms.Button();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.dgPersons = new System.Windows.Forms.DataGridView();
             this.txtEnroll = new System.Windows.Forms.TextBox();
+            this.btnSave = new System.Windows.Forms.Button();
             this.btnThumbRegistration = new System.Windows.Forms.Button();
             this.panel2 = new System.Windows.Forms.Panel();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.panel1 = new System.Windows.Forms.Panel();
             this.pictheader = new System.Windows.Forms.PictureBox();
-            this.dgPersons = new System.Windows.Forms.DataGridView();
             this.txtDesignamtion = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.txtOther = new System.Windows.Forms.TextBox();
@@ -49,15 +50,14 @@
             this.button1 = new System.Windows.Forms.Button();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.btnSave = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgPersons)).BeginInit();
             this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictheader)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dgPersons)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -70,6 +70,8 @@
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(878, 508);
             this.tabControl1.TabIndex = 0;
+            this.tabControl1.SelectedIndexChanged += new System.EventHandler(this.tabControl1_SelectedIndexChanged);
+            this.tabControl1.TabIndexChanged += new System.EventHandler(this.tabControl1_TabIndexChanged);
             // 
             // tabPage1
             // 
@@ -104,12 +106,12 @@
             // tabPage2
             // 
             this.tabPage2.BackColor = System.Drawing.Color.MediumSpringGreen;
-            this.tabPage2.Controls.Add(this.btnSave);
+            this.tabPage2.Controls.Add(this.dgPersons);
             this.tabPage2.Controls.Add(this.txtEnroll);
+            this.tabPage2.Controls.Add(this.btnSave);
             this.tabPage2.Controls.Add(this.btnThumbRegistration);
             this.tabPage2.Controls.Add(this.panel2);
             this.tabPage2.Controls.Add(this.panel1);
-            this.tabPage2.Controls.Add(this.dgPersons);
             this.tabPage2.Controls.Add(this.txtDesignamtion);
             this.tabPage2.Controls.Add(this.label4);
             this.tabPage2.Controls.Add(this.txtOther);
@@ -127,6 +129,20 @@
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Person Registration";
             // 
+            // dgPersons
+            // 
+            this.dgPersons.AllowUserToAddRows = false;
+            this.dgPersons.AllowUserToDeleteRows = false;
+            this.dgPersons.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.dgPersons.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgPersons.Location = new System.Drawing.Point(1, 124);
+            this.dgPersons.Name = "dgPersons";
+            this.dgPersons.Size = new System.Drawing.Size(861, 306);
+            this.dgPersons.TabIndex = 9;
+            this.dgPersons.CellContentDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgPersons_CellContentDoubleClick);
+            // 
             // txtEnroll
             // 
             this.txtEnroll.Location = new System.Drawing.Point(671, 59);
@@ -134,10 +150,23 @@
             this.txtEnroll.Name = "txtEnroll";
             this.txtEnroll.Size = new System.Drawing.Size(191, 128);
             this.txtEnroll.TabIndex = 15;
+            this.txtEnroll.Visible = false;
+            // 
+            // btnSave
+            // 
+            this.btnSave.Location = new System.Drawing.Point(590, 164);
+            this.btnSave.Name = "btnSave";
+            this.btnSave.Size = new System.Drawing.Size(75, 23);
+            this.btnSave.TabIndex = 16;
+            this.btnSave.Text = "Save";
+            this.btnSave.UseVisualStyleBackColor = true;
+            this.btnSave.Visible = false;
+            this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
             // btnThumbRegistration
             // 
-            this.btnThumbRegistration.Location = new System.Drawing.Point(211, 168);
+            this.btnThumbRegistration.Enabled = false;
+            this.btnThumbRegistration.Location = new System.Drawing.Point(485, 86);
             this.btnThumbRegistration.Name = "btnThumbRegistration";
             this.btnThumbRegistration.Size = new System.Drawing.Size(109, 23);
             this.btnThumbRegistration.TabIndex = 14;
@@ -179,23 +208,9 @@
             this.pictheader.TabIndex = 10;
             this.pictheader.TabStop = false;
             // 
-            // dgPersons
-            // 
-            this.dgPersons.AllowUserToAddRows = false;
-            this.dgPersons.AllowUserToDeleteRows = false;
-            this.dgPersons.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.dgPersons.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgPersons.Location = new System.Drawing.Point(3, 197);
-            this.dgPersons.Name = "dgPersons";
-            this.dgPersons.Size = new System.Drawing.Size(861, 226);
-            this.dgPersons.TabIndex = 9;
-            this.dgPersons.CellContentDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgPersons_CellContentDoubleClick);
-            // 
             // txtDesignamtion
             // 
-            this.txtDesignamtion.Location = new System.Drawing.Point(76, 128);
+            this.txtDesignamtion.Location = new System.Drawing.Point(318, 89);
             this.txtDesignamtion.Name = "txtDesignamtion";
             this.txtDesignamtion.Size = new System.Drawing.Size(128, 20);
             this.txtDesignamtion.TabIndex = 8;
@@ -203,11 +218,11 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(10, 135);
+            this.label4.Location = new System.Drawing.Point(229, 96);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(66, 13);
+            this.label4.Size = new System.Drawing.Size(44, 13);
             this.label4.TabIndex = 7;
-            this.label4.Text = "Designation:";
+            this.label4.Text = "Cell No:";
             // 
             // txtOther
             // 
@@ -215,6 +230,7 @@
             this.txtOther.Name = "txtOther";
             this.txtOther.Size = new System.Drawing.Size(128, 20);
             this.txtOther.TabIndex = 6;
+            this.txtOther.Visible = false;
             // 
             // label3
             // 
@@ -224,6 +240,7 @@
             this.label3.Size = new System.Drawing.Size(36, 13);
             this.label3.TabIndex = 5;
             this.label3.Text = "Login:";
+            this.label3.Visible = false;
             this.label3.Click += new System.EventHandler(this.label3_Click);
             // 
             // txtName
@@ -250,6 +267,7 @@
             this.button1.TabIndex = 2;
             this.button1.Text = "Fetch Details";
             this.button1.UseVisualStyleBackColor = true;
+            this.button1.Visible = false;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // textBox1
@@ -258,6 +276,7 @@
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(128, 20);
             this.textBox1.TabIndex = 1;
+            this.textBox1.Visible = false;
             // 
             // label1
             // 
@@ -267,16 +286,7 @@
             this.label1.Size = new System.Drawing.Size(36, 13);
             this.label1.TabIndex = 0;
             this.label1.Text = "Login:";
-            // 
-            // btnSave
-            // 
-            this.btnSave.Location = new System.Drawing.Point(590, 164);
-            this.btnSave.Name = "btnSave";
-            this.btnSave.Size = new System.Drawing.Size(75, 23);
-            this.btnSave.TabIndex = 16;
-            this.btnSave.Text = "Save";
-            this.btnSave.UseVisualStyleBackColor = true;
-            this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
+            this.label1.Visible = false;
             // 
             // MainForm
             // 
@@ -287,15 +297,16 @@
             this.Controls.Add(this.tabControl1);
             this.Name = "MainForm";
             this.Text = "Form1";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
             this.tabPage2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgPersons)).EndInit();
             this.panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.panel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictheader)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dgPersons)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -321,9 +332,9 @@
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Button btnThumbRegistration;
         private System.Windows.Forms.Button button2;
-        private UserControls.Attendence attendence1;
         internal System.Windows.Forms.TextBox txtEnroll;
         private System.Windows.Forms.Button btnSave;
+        private UserControls.Attendence attendence1;
     }
 }
 

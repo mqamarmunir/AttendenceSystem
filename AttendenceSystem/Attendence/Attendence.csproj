@@ -84,6 +84,7 @@
     </Compile>
     <Compile Include="Person.cs" />
     <Compile Include="PersonFingerPrint.cs" />
+    <Compile Include="personnelAttendence.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StaticData.cs" />

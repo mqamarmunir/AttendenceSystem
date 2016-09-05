@@ -40,13 +40,13 @@ namespace Attendence
         {
             try
             {
-                FetchUserDetails(textBox1.Text.Trim());
+              //  FetchUserDetails(textBox1.Text.Trim());
                
             }
             catch { }
         }
 
-        private void FetchUserDetails(string loginName)
+        private void FetchUserDetails(int Personid)
         {
             if (StaticData.Persondatalist != null && StaticData.Persondatalist.Count > 0)
             {
@@ -58,13 +58,14 @@ namespace Attendence
                 //tring login = loginName;
 
                 Person person = null;
-                person = StaticData.Persondatalist.SingleOrDefault(c => c.Login == loginName);
+                person = StaticData.Persondatalist.SingleOrDefault(c => c.UserId == Personid);
                 if (person != null)
                 {
-                    txtName.Text = person.FullName;
-                    txtDesignamtion.Text = person.Designation;
-                    textBox1.Text = person.Login;
+                    txtName.Text = person.FirstName + " " +person.LastName;
+                    txtDesignamtion.Text = person.CellNo;
+                    //textBox1.Text = person.Login;
                     personid = person.UserId;
+                    btnThumbRegistration.Enabled = true;
                 }
                 else
                 {
@@ -84,6 +85,9 @@ namespace Attendence
             txtName.Text = "";
             txtOther.Text = "";
             textBox1.Text = "";
+            btnThumbRegistration.Enabled = false;
+            personid = 0;
+
         }
 
         private void label3_Click(object sender, EventArgs e)
@@ -93,9 +97,18 @@ namespace Attendence
 
         private void dgPersons_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
-            string loginName = dgPersons.Rows[e.RowIndex].Cells["Login"].Value.ToString().Trim();
-            FetchUserDetails(loginName);
+            if (dgPersons.Rows[e.RowIndex].Cells["FingerPrint"].Value.ToString().Trim() == "")
+            {
+                int userid = Convert.ToInt32(dgPersons.Rows[e.RowIndex].Cells["userid"].Value.ToString().Trim());
+                FetchUserDetails(userid);
+
+            }
+            else
+            {
+                MessageBox.Show("User already registered.");
+            }
         }
+
         private enum Action
         {
             SendMessage
@@ -220,8 +233,11 @@ namespace Attendence
                 ///d
                 /// dgPersons.DataSource = StaticData.Persondatalist;
                 /// 
+                ResetForm();
                 dgPersons.DataSource = null;
                 dgPersons.DataSource = StaticData.Persondatalist;
+                
+
             }
         }
 
@@ -374,6 +390,38 @@ namespace Attendence
             //// var content = new FormUrlEncodedContent(values);
             //HttpContent content = new StringContent(values.ToString(), Encoding.UTF8, "application/json");
             //var response =  client.PostAsync(apiUrl, content).Result;
+        }
+
+        private void tabControl1_TabIndexChanged(object sender, EventArgs e)
+        {
+           
+        }
+
+        private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (tabControl1.SelectedIndex == 0)
+            {
+                _readers = ReaderCollection.GetReaders();
+                currentReader = _readers[0];
+                //OpenReader();
+                //StartCaptureAsync();
+                attendence1._sender = this;
+                attendence1.InitializeDevice();
+            }
+            else
+            {
+                CurrentReader.Dispose();
+                CurrentReader = null;
+            }
+        }
+
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (CurrentReader != null)
+            {
+                CurrentReader.Dispose();
+                CurrentReader = null;
+            }
         }
     }
 }

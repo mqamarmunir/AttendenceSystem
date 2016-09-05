@@ -26,11 +26,10 @@ namespace AttendenceWebAPI.Controllers
                     {
                         FirstName = dv[i]["FirstName"].ToString(),
                         LastName = dv[i]["LastName"].ToString(),
-                        Designation = dv[i]["Designation"].ToString(),
-                        FullName = dv[i]["FullName"].ToString(),
-                        Login = dv[i]["Login"].ToString(),
+                        CellNo = dv[i]["CellNo"].ToString(),
                         Org_BranchId = dv[i]["BranchID"].ToString(),
-                        UserId = Convert.ToInt32(dv[i]["UserID"].ToString())
+                        UserId = Convert.ToInt32(dv[i]["UserID"].ToString()),
+                        FingerPrint =dv[i]["thumb_code"].ToString().Trim()
                     };
                     lstPerson.Add(objPerson);
                 }
@@ -53,11 +52,10 @@ namespace AttendenceWebAPI.Controllers
                     {
                         FirstName = dv[i]["FirstName"].ToString(),
                         LastName = dv[i]["LastName"].ToString(),
-                        Designation = dv[i]["Designation"].ToString(),
-                        FullName = dv[i]["FullName"].ToString(),
-                        Login = dv[i]["Login"].ToString(),
+                        CellNo = dv[i]["CellNo"].ToString(),
                         Org_BranchId = dv[i]["BranchID"].ToString(),
-                        UserId = Convert.ToInt32(dv[i]["UserID"].ToString())
+                        UserId = Convert.ToInt32(dv[i]["UserID"].ToString()),
+                        FingerPrint = dv[i]["thumb_code"].ToString().Trim()
                     };
                     lstPerson.Add(objPerson);
                 }
@@ -66,14 +64,27 @@ namespace AttendenceWebAPI.Controllers
         }
 
         // POST: api/Person
-        public void Post(personFingerPrint personfingerprint)
+        public HttpResponseMessage Post(personFingerPrint personfingerprint)
         {
+            HttpResponseMessage response;
             var x = personfingerprint;
             int orgid = personfingerprint.Orgid;
             int branchid = personfingerprint.BranchId;
             int id = personfingerprint.PersonID;
             string data = personfingerprint.FingerPrintDataXML;
-            System.IO.File.WriteAllText(@"D:\Writeme.txt", data);
+           // System.IO.File.WriteAllText(@"D:\Writeme.txt", data);
+
+            Personnel objperson = new Personnel();
+            objperson.EmployeeId = personfingerprint.PersonID;
+            objperson.Thumbcode = personfingerprint.FingerPrintDataXML;
+            if (!objperson.Insert())
+            {
+                 response = Request.CreateResponse(HttpStatusCode.ExpectationFailed,objperson.StrErrorMessage);
+            }
+            else
+                response = Request.CreateResponse(HttpStatusCode.Created);
+            return response;
+            //return new HttpResponseMessage(HttpStatusCode.Created);
         }
 
         // PUT: api/Person/5
